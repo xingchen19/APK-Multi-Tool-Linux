@@ -36,6 +36,7 @@ chmod 755 baksmali.jar
 chmod 755 optipng
 chmod 755 signapk.jar
 chmod 755 smali.jar
+chmod 755 dex2jar/dex2jar
 cd $current
 chmod 755 script.sh
 echo "Done setting permissions"

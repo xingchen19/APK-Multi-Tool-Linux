@@ -340,7 +340,7 @@ selt () {
 	PS3=$(echo ""; echo "Choose APK: ")
 	fileList=$(find . -type f -name "*.apk")
 	# Clean up list.
-	fileList=${fileList/\.\//}
+	fileList=${fileList//\.\//}
 
 	if [[ -z $fileList ]] ; then
 		clear
@@ -819,7 +819,8 @@ export PATH
 echo -n "Checking required binaries & files... "
 # Test for needed programs and warn if missing
 ERROR="0"
-for PROGRAM in "optipng" "7za" "java" "sudo" "adb" "aapt" "sox"
+#for PROGRAM in "optipng" "7za" "java" "sudo" "adb" "aapt" "sox"
+for PROGRAM in "java" "sudo" "adb" "sox" "zipalign"
 do
 	which "$PROGRAM" > /dev/null
 	if [ "x$?" = "x1" ] ; then

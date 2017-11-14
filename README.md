@@ -83,7 +83,7 @@ Adb
 
 - Note: .jar files need to be renamed to .apk, then put in modding folder
 
-#Got problems ?
+# Got problems ?
 
 1. Make sure your path has no spaces
 2. Your filename has no wierd characters

@@ -146,9 +146,10 @@ ins () {
 	clear
 	echo
 	if [[ $(adb devices | grep "device" -c) -gt "1" ]] ; then
-		echo "Install APK: $fileName.apk (y/N)?"
+	#if [[ true ]] ; then
+		echo "Install package: $fileName (y/N)?"
 		read INPUT
-		if [ x$INPUT -e "xy" || x$INPUT -e "xY" ] ; then
+		if [[ x$INPUT -eq "xy" || x$INPUT -eq "xY" ]]; then
 			#echo "adb install -r place-apk-here-for-modding/$fileName-signed.apk"
 			adb install -r "place-apk-here-for-modding/$fileName-signed.apk"
 		fi
@@ -350,7 +351,7 @@ selt () {
 			if [[ -n "$fileName" ]] ; then
 				fileName=${fileName%.*}
 				if [[ $1 == "s1" ]]; then clear ; fi
-					echo ; echo "Selected: $fileName.apk" ; break
+					echo ; echo "Selected: $fileName" ; break
 					return 0
 			else
 		    	echo ; echo "Error. Wrong input."
@@ -743,7 +744,7 @@ restart () {
 	echo "-------------------------------------------------------------------------------"
 	printf "  Active APK File: "
 	if [[ -n $fileName ]] ; then
-		printf "$fileName.apk"
+		printf "$fileName"
 	else
 		printf "NONE"
 	fi

@@ -147,7 +147,7 @@ ins () {
 	echo
 	if [[ $(adb devices | grep "device" -c) -gt "1" ]] ; then
 	#if [[ true ]] ; then
-		echo "Install package: $fileName (y/N)?"
+		echo "Install package: $fileName-signed.apk (y/N)?"
 		read INPUT
 		if [[ x$INPUT -eq "xy" || x$INPUT -eq "xY" ]]; then
 			#echo "adb install -r place-apk-here-for-modding/$fileName-signed.apk"

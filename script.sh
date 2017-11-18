@@ -270,6 +270,7 @@ retainorigfiles () {
 all () {
 	co
 	si
+	zipa
 	ins
 }
 
@@ -639,21 +640,33 @@ cls2jar () {
 	echo
 	# Check if an active APK is set.
 	if [[ -n $fileName ]] ; then
+                printf "Warn: All the files in projects dir will be delete/clear. continue? [y](Y/n):"
+                read INPUT
+                if [[ x$INPUT == "xy" || x$INPUT == "xY" || x$INPUT == "x" ]]; then
+                        echo "run \"rm -rf projects/*\" to delete all projects files..."
+                        rm -rf projects/*
+                else
+                        echo "Operation aborted."
+                        return 1
+                fi
 
-		cd other
-		7za e "../place-apk-here-for-modding/$fileName.apk" -ir\!"classes.dex" -o"../projects/" -y
-		safeName=${fileName//" "/"-"}
-		mv "../projects/classes.dex" "../projects/$safeName.dex"
-		cd ..
-		cd projects
-		../other/dex2jar/dex2jar "$safeName.dex"
-		if [[ $safeName != $fileName ]]; then
-			mv -uf "$safeName.dex" "$fileName.dex"
-		fi
-		mv -uf "$safeName-dex2jar.jar" "$fileName.jar"
-		cd ..
+                cd other
+                7za e "../place-apk-here-for-modding/$fileName.apk" -ir\!"classes*.dex" -o"../projects/" -y safeName=${fileName//" "/"-"}
 
-		clear ; echo ; echo "Created /projects/$fileName.jar"
+                cd ../projects
+                dexList=$(find . -type f -name "*.dex")
+                # Clean up list.
+                dexList=${dexList//\.\//}
+
+                if [[ "x$dexList" == "x" ]]; then
+                        echo "Error no dex files found, exist..."
+                        return 1
+                else
+                        for dex in $dexList; do
+                                ../other/dex2jar/dex2jar.sh $dex
+                                echo ; echo "Successful: Created /projects/$dex.jar"
+                        done
+                fi
 	else
 		actvfile ; retval=$? ; if [[ $retval == 0 ]]; then cls2jar ; fi
 	fi
@@ -674,6 +687,36 @@ viewjar () {
 	else
 		actvfile ; retval=$? ; if [[ $retval == 0 ]]; then viewjar ; fi
 	fi
+}
+
+jar2java (){
+        cd projects
+        jarList=$(find . -type f -name "*.jar")
+        # Clean up list.
+        jarList=${jarList//\.\//}
+
+        if [[ "x$jarList" == "x" ]]; then
+                echo "no jar files found under projects dir. please select \"51 Decompile Classes.dex\" before this operation"
+                return 1
+        fi
+
+        for jar in $jarList; do
+                jarName=${jar%*.jar}
+                mkdir $jarName
+                mv $jar $jarName/
+                cd $jarName
+                jar -xvf $jar
+                mv $jar ../
+                cd ../
+		javaDir="${jarName}-java"
+		rm -rf ${javaDir}; mkdir ${javaDir}
+		dirList=$(find ${jarName} -type d -name "*")
+		for dir in $dirList; do
+			../other/jad158/jad -o -r -s java -d ${javaDir}/ ${dir}/*.class
+		done
+		javaDirs="${javaDir}   ${javaDirs}"
+        done
+        echo;echo "Successful: Created the java source code under dir:" ${javaDirs}
 }
 
 crtdirs () {
@@ -726,7 +769,8 @@ restart () {
 	echo "  41   Create Update.zip                 42   Push Update.zip to device        "
 	echo
 	echo "- Decompile Classes.dex & View Decompiled Code --------------------------------"
-	echo "  51   Decompile Classes.dex             52   View Decompiled Code             "
+	echo "  51   Decompile Classes*.dex             52   View Decompiled Code             "
+	echo "  53   Decomplie Classes*.dex.jar to JAVA"
 	echo
 	echo "- ADB Device & APK Management -------------------------------------------------"
 	echo "  30   Backup Device Installed APKs      31   Batch Rename APK                 "
@@ -783,6 +827,7 @@ restart () {
 		42)  pushzip ;;
 		51)  cls2jar ;;
 		52)  viewjar ;;
+		53)  jar2java ;;
 		99)  fixperm ;;
 		"00"|"exit")   quit ;;
 		 *)

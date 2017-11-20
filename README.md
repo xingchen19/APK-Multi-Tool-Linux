@@ -1,16 +1,3 @@
-I am currently working on a major update to the apk manager application as well and changing the name to APK Multi-Tool with some new added features and also to fix some issues with some code errors.
-
-I am also changing a lot of the features as well since a lot of the code has been outdated for a while.
-I have updated all the files and modified Apk manager's Scripts to fix many user reported bugs from Daneshm90 apk manager which he had written a simple script to ease the process of editing apks. Got a lot of downloads so thought its in demand 
-Whether you're doing basic image editing or editing the smali or xml files, on average u have to use (Brut.all or JF's smali/baksmali) awesome tool to extract the apk, edit it, then sign the apk and then adb push/install it. This process is quite tiresome if you are testing a method that needs fine tweaking.
-This script should make the process a LOT smoother.
-Theres an option of compiling/signing/installing all in one step 
-
-Thanks: 
-Goes to Daneshm90 the Original Writer of APK Manager
-Goes to Brut.all for his awesome tool.
-Goes to JF for ofcourse, smali/baksmali
-
 
 # Features: 
 > - Added framework dependent decompiling (For non propietary rom apks). (Option 10). Checks whether the dependee apk u selected is correct.
@@ -39,8 +26,8 @@ Goes to JF for ofcourse, smali/baksmali
 
 
 # Requirements: 
-Java 1.7 
-Adb
+> * Java > 1.7
+> * Adb
 
 
 # Installing APK Multi-Tool Itself

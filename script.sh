@@ -737,6 +737,14 @@ showpkg () {
 	fi
 }
 
+showsig () {
+	if [[ -n $fileName ]]; then
+		jarsigner -verify -verbose -certs ./place-apk-here-for-modding/$fileName.apk
+	else
+		actvfile ; retval=$? ; if [[ $retval == 0 ]]; then clear ; showsig ; fi
+	fi
+}
+
 fixperm () {
 	./other/perm
 	clear
@@ -783,6 +791,7 @@ restart () {
 	echo "  23   Set Compression Level     (Current compression level: $clvl)"
 	echo "  24   Create all missing directories"
 	echo "  25   Show APK package information"
+	echo "  26   Show APK signatrues information"
 	echo "  99   Fix Tools permissions"
 	echo "  00   Quit"
 	echo "-------------------------------------------------------------------------------"
@@ -820,6 +829,7 @@ restart () {
 		23)   setclv ;;
 		24)  crtdirs ;;
 		25)  showpkg ;;
+		26)  showsig ;;
 		30)  devback ;;
 		31)   apren "../apk-rename/" ;;
 		32)   devres ;;
